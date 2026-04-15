@@ -135,6 +135,30 @@ function deleteCat(type,i){
   saveCats();renderCategories();
 }
 
+
+// === PROFILE MENU ===
+function toggleProfileMenu(){
+  const dd=document.getElementById('profile-dropdown');
+  const ch=document.getElementById('profile-chevron');
+  const open=dd.style.display==='block';
+  dd.style.display=open?'none':'block';
+  if(ch)ch.style.transform=open?'':'rotate(180deg)';
+}
+function toggleMobileMenu(){
+  const dd=document.getElementById('mobile-dropdown');
+  dd.style.display=dd.style.display==='block'?'none':'block';
+  lucide.createIcons();
+}
+// Close dropdowns when clicking outside
+document.addEventListener('click',e=>{
+  const pd=document.getElementById('profile-dropdown');
+  const pt=document.getElementById('profile-trigger');
+  const md=document.getElementById('mobile-dropdown');
+  const mb=document.getElementById('mobile-avatar-btn');
+  if(pd&&pd.style.display==='block'&&!pd.contains(e.target)&&e.target!==pt&&!pt.contains(e.target)){pd.style.display='none';const ch=document.getElementById('profile-chevron');if(ch)ch.style.transform='';}
+  if(md&&md.style.display==='block'&&!md.contains(e.target)&&e.target!==mb){md.style.display='none';}
+});
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js">
 // === EDIT TRANSACTION ===
@@ -264,6 +288,30 @@ function deleteCat(type,i){
   saveCats();renderCategories();
 }
 
+
+// === PROFILE MENU ===
+function toggleProfileMenu(){
+  const dd=document.getElementById('profile-dropdown');
+  const ch=document.getElementById('profile-chevron');
+  const open=dd.style.display==='block';
+  dd.style.display=open?'none':'block';
+  if(ch)ch.style.transform=open?'':'rotate(180deg)';
+}
+function toggleMobileMenu(){
+  const dd=document.getElementById('mobile-dropdown');
+  dd.style.display=dd.style.display==='block'?'none':'block';
+  lucide.createIcons();
+}
+// Close dropdowns when clicking outside
+document.addEventListener('click',e=>{
+  const pd=document.getElementById('profile-dropdown');
+  const pt=document.getElementById('profile-trigger');
+  const md=document.getElementById('mobile-dropdown');
+  const mb=document.getElementById('mobile-avatar-btn');
+  if(pd&&pd.style.display==='block'&&!pd.contains(e.target)&&e.target!==pt&&!pt.contains(e.target)){pd.style.display='none';const ch=document.getElementById('profile-chevron');if(ch)ch.style.transform='';}
+  if(md&&md.style.display==='block'&&!md.contains(e.target)&&e.target!==mb){md.style.display='none';}
+});
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 // === EDIT TRANSACTION ===
@@ -392,6 +440,30 @@ function deleteCat(type,i){
   if(type==='expense')EXPENSE_CATS=cats;else INCOME_CATS=cats;
   saveCats();renderCategories();
 }
+
+
+// === PROFILE MENU ===
+function toggleProfileMenu(){
+  const dd=document.getElementById('profile-dropdown');
+  const ch=document.getElementById('profile-chevron');
+  const open=dd.style.display==='block';
+  dd.style.display=open?'none':'block';
+  if(ch)ch.style.transform=open?'':'rotate(180deg)';
+}
+function toggleMobileMenu(){
+  const dd=document.getElementById('mobile-dropdown');
+  dd.style.display=dd.style.display==='block'?'none':'block';
+  lucide.createIcons();
+}
+// Close dropdowns when clicking outside
+document.addEventListener('click',e=>{
+  const pd=document.getElementById('profile-dropdown');
+  const pt=document.getElementById('profile-trigger');
+  const md=document.getElementById('mobile-dropdown');
+  const mb=document.getElementById('mobile-avatar-btn');
+  if(pd&&pd.style.display==='block'&&!pd.contains(e.target)&&e.target!==pt&&!pt.contains(e.target)){pd.style.display='none';const ch=document.getElementById('profile-chevron');if(ch)ch.style.transform='';}
+  if(md&&md.style.display==='block'&&!md.contains(e.target)&&e.target!==mb){md.style.display='none';}
+});
 
 </script>
 <style>
@@ -555,6 +627,7 @@ a,button,input,select{transition:color var(--transition),background var(--transi
 .year-btn.active{background:var(--color-primary);border-color:var(--color-primary);color:#fff;}
 .table-wrap{overflow-x:auto;}
 .sql-box{background:var(--color-surface-offset);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-4);font-family:var(--font-mono);font-size:11px;line-height:1.8;white-space:pre-wrap;color:var(--color-text-muted);margin-bottom:var(--space-4);}
+.mobile-profile-wrap{display:none;}
 @media(max-width:767px){
   body{flex-direction:column;}
   #app{flex-direction:column;}
@@ -565,6 +638,7 @@ a,button,input,select{transition:color var(--transition),background var(--transi
   .nav-label{display:none;}
   .nav-item{padding:var(--space-1) var(--space-3);}
   .sidebar-footer{display:none;}
+  .mobile-profile-wrap{display:block;}
   .content{padding:var(--space-4);}
   .chart-grid{grid-template-columns:1fr;}
   .kpi-grid{grid-template-columns:repeat(2,1fr);}
@@ -682,9 +756,27 @@ create policy "own_cats" on categories for all using (auth.uid() = user_id);</di
       </div>
     </nav>
     <div class="sidebar-footer">
-      <div class="user-info"><div class="user-avatar" id="user-avatar">?</div><div class="user-email" id="user-email-display"></div></div>
-      <div class="sync-badge" id="sync-status" style="margin-bottom:var(--space-2)"><i data-lucide="cloud" style="width:12px;height:12px"></i>&nbsp;<span id="sync-text">Synced</span></div>
-      <button class="signout-btn" onclick="signOut()"><i data-lucide="log-out" style="width:12px;height:12px"></i>&nbsp;Sign out</button>
+      <div class="profile-menu-wrap" style="position:relative;">
+        <button class="profile-trigger" id="profile-trigger" onclick="toggleProfileMenu()" style="width:100%;display:flex;align-items:center;gap:var(--space-2);padding:var(--space-2);border-radius:var(--radius-md);background:none;border:none;cursor:pointer;transition:background var(--transition);">
+          <div class="user-avatar" id="user-avatar">?</div>
+          <div style="flex:1;min-width:0;text-align:left;">
+            <div class="user-email" id="user-email-display" style="font-size:var(--text-xs);color:var(--color-text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
+            <div class="sync-badge" id="sync-status" style="font-size:10px;"><i data-lucide="cloud" style="width:10px;height:10px"></i>&nbsp;<span id="sync-text">Synced</span></div>
+          </div>
+          <i data-lucide="chevron-up" style="width:14px;height:14px;color:var(--color-text-faint);flex-shrink:0;" id="profile-chevron"></i>
+        </button>
+        <div id="profile-dropdown" style="display:none;position:absolute;bottom:calc(100% + 4px);left:0;right:0;background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden;z-index:50;">
+          <div style="padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-divider);">
+            <div style="font-size:var(--text-xs);font-weight:600;color:var(--color-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="profile-email-full"></div>
+            <div style="font-size:10px;color:var(--color-text-faint);margin-top:2px;">Signed in</div>
+          </div>
+          <div style="padding:var(--space-2);">
+            <button onclick="signOut()" style="width:100%;display:flex;align-items:center;gap:var(--space-2);padding:var(--space-2) var(--space-3);border-radius:var(--radius-md);font-size:var(--text-xs);color:var(--color-error);background:none;border:none;cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--color-error-highlight)'" onmouseout="this.style.background='none'">
+              <i data-lucide="log-out" style="width:14px;height:14px;"></i> Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </aside>
   <div class="main">
@@ -695,6 +787,20 @@ create policy "own_cats" on categories for all using (auth.uid() = user_id);</di
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
         </button>
+        <div style="position:relative;" class="mobile-profile-wrap">
+          <button onclick="toggleMobileMenu()" class="theme-toggle" id="mobile-avatar-btn" aria-label="Account" style="font-size:var(--text-xs);font-weight:700;color:var(--color-primary);background:var(--color-primary-highlight);" id="mobile-avatar-btn">?</button>
+          <div id="mobile-dropdown" style="display:none;position:absolute;top:calc(100% + 8px);right:0;min-width:200px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden;z-index:50;">
+            <div style="padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-divider);">
+              <div style="font-size:var(--text-xs);font-weight:600;color:var(--color-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="mobile-email-display">demo</div>
+              <div class="sync-badge" id="sync-status-mobile" style="font-size:10px;margin-top:2px;"><i data-lucide="cloud" style="width:10px;height:10px"></i>&nbsp;Synced</div>
+            </div>
+            <div style="padding:var(--space-2);">
+              <button onclick="signOut()" style="width:100%;display:flex;align-items:center;gap:var(--space-2);padding:var(--space-2) var(--space-3);border-radius:var(--radius-md);font-size:var(--text-sm);color:var(--color-error);background:none;border:none;cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--color-error-highlight)'" onmouseout="this.style.background='none'">
+                <i data-lucide="log-out" style="width:14px;height:14px;"></i> Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
     <div class="content">
@@ -850,6 +956,9 @@ function showApp(user) {
   const email = user.email || 'demo';
   document.getElementById('user-email-display').textContent = email;
   document.getElementById('user-avatar').textContent = email[0].toUpperCase();
+  if(document.getElementById('profile-email-full'))document.getElementById('profile-email-full').textContent = email;
+  if(document.getElementById('mobile-email-display'))document.getElementById('mobile-email-display').textContent = email;
+  const mab=document.getElementById('mobile-avatar-btn');if(mab)mab.textContent=email[0].toUpperCase();
   lucide.createIcons();
   renderDashboard();
 }
@@ -1248,6 +1357,30 @@ function deleteCat(type,i){
   if(type==='expense')EXPENSE_CATS=cats;else INCOME_CATS=cats;
   saveCats();renderCategories();
 }
+
+
+// === PROFILE MENU ===
+function toggleProfileMenu(){
+  const dd=document.getElementById('profile-dropdown');
+  const ch=document.getElementById('profile-chevron');
+  const open=dd.style.display==='block';
+  dd.style.display=open?'none':'block';
+  if(ch)ch.style.transform=open?'':'rotate(180deg)';
+}
+function toggleMobileMenu(){
+  const dd=document.getElementById('mobile-dropdown');
+  dd.style.display=dd.style.display==='block'?'none':'block';
+  lucide.createIcons();
+}
+// Close dropdowns when clicking outside
+document.addEventListener('click',e=>{
+  const pd=document.getElementById('profile-dropdown');
+  const pt=document.getElementById('profile-trigger');
+  const md=document.getElementById('mobile-dropdown');
+  const mb=document.getElementById('mobile-avatar-btn');
+  if(pd&&pd.style.display==='block'&&!pd.contains(e.target)&&e.target!==pt&&!pt.contains(e.target)){pd.style.display='none';const ch=document.getElementById('profile-chevron');if(ch)ch.style.transform='';}
+  if(md&&md.style.display==='block'&&!md.contains(e.target)&&e.target!==mb){md.style.display='none';}
+});
 
 </script>
 </body>
